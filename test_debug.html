@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Debug Chiffre Affine</title>
+</head>
+<body>
+    <h1>Test de débogage du chiffre affine</h1>
+    <pre id="output"></pre>
+    
+    <script>
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const output = document.getElementById('output');
+        
+        function log(text) {
+            output.textContent += text + '\n';
+        }
+        
+        // Trouve l'inverse modulaire
+        function modInverse(a, m) {
+            a = a % m;
+            for (let x = 1; x < m; x++) {
+                if ((a * x) % m === 1) {
+                    return x;
+                }
+            }
+            return -1;
+        }
+        
+        // Test avec BONJOUR -> NAVBAEP
+        const a = 5;
+        const b = 8;
+        const texteOriginal = "BONJOUR";
+        const texteChiffre = "NAVBAEP";
+        
+        log(`Clés: a=${a}, b=${b}`);
+        log(`Inverse de ${a} mod 26 = ${modInverse(a, 26)}`);
+        log('');
+        
+        log('=== CHIFFREMENT ===');
+        log(`Texte original: ${texteOriginal}`);
+        
+        for (let i = 0; i < texteOriginal.length; i++) {
+            const char = texteOriginal[i];
+            const x = alphabet.indexOf(char);
+            const encrypted = (a * x + b) % 26;
+            const encryptedChar = alphabet[encrypted];
+            log(`${char}(${x}) -> (${a}×${x} + ${b}) mod 26 = ${a*x + b} mod 26 = ${encrypted} = ${encryptedChar}`);
+        }
+        
+        log('');
+        log('=== DÉCHIFFREMENT ===');
+        log(`Texte chiffré: ${texteChiffre}`);
+        const aInverse = modInverse(a, 26);
+        log(`Inverse de a: ${aInverse}`);
+        
+        for (let i = 0; i < texteChiffre.length; i++) {
+            const char = texteChiffre[i];
+            const y = alphabet.indexOf(char);
+            
+            // Méthode 1: comme dans le code actuel
+            let yMinusB = (y - b) % 26;
+            if (yMinusB < 0) {
+                yMinusB += 26;
+            }
+            const decrypted1 = (aInverse * yMinusB) % 26;
+            const decryptedChar1 = alphabet[decrypted1];
+            
+            // Méthode 2: calcul direct
+            let temp = y - b;
+            if (temp < 0) temp += 26;
+            const decrypted2 = (aInverse * temp) % 26;
+            const decryptedChar2 = alphabet[decrypted2];
+            
+            log(`${char}(${y}):`);
+            log(`  Méthode 1: (${y} - ${b}) mod 26 = ${yMinusB}, puis ${aInverse}×${yMinusB} mod 26 = ${decrypted1} = ${decryptedChar1}`);
+            log(`  Méthode 2: ${y} - ${b} = ${y-b}, ajusté = ${temp}, puis ${aInverse}×${temp} mod 26 = ${decrypted2} = ${decryptedChar2}`);
+        }
+        
+        // Test complet avec toutes les lettres
+        log('\n=== TABLE DE CORRESPONDANCE COMPLÈTE ===');
+        log('Original -> Chiffré -> Déchiffré');
+        for (let i = 0; i < 26; i++) {
+            const original = alphabet[i];
+            const encrypted = (a * i + b) % 26;
+            const encryptedChar = alphabet[encrypted];
+            
+            let temp = encrypted - b;
+            if (temp < 0) temp += 26;
+            const decrypted = (aInverse * temp) % 26;
+            const decryptedChar = alphabet[decrypted];
+            
+            log(`${original}(${i}) -> ${encryptedChar}(${encrypted}) -> ${decryptedChar}(${decrypted})`);
+        }
+    </script>
+</body>
+</html>

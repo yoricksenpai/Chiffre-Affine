@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Chiffre Affine</title>
+    <link rel="stylesheet" href="Chiffrement.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Simulateur de Chiffre Affine</h1>
+            <p class="subtitle">Explorez le chiffrement affine avec visualisation interactive</p>
+        </header>
+
+        <div class="info-section">
+            <h2>Qu'est-ce que le Chiffre Affine ?</h2>
+            <p>Le chiffre affine est une méthode de chiffrement par substitution monoalphabétique où chaque lettre est transformée selon la formule :</p>
+            <div class="formula">
+                <p><strong>Chiffrement :</strong> E(x) = (ax + b) mod 26</p>
+                <p><strong>Déchiffrement :</strong> D(y) = a⁻¹(y - b) mod 26</p>
+            </div>
+            <p>Où <strong>a</strong> et <strong>b</strong> sont les clés, et <strong>a</strong> doit être premier avec 26.</p>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <h3>Paramètres de Chiffrement</h3>
+                <div class="key-inputs">
+                    <div class="input-group">
+                        <label for="keyA">Clé a (doit être premier avec 26)</label>
+                        <input type="number" id="keyA" min="1" max="25" value="5">
+                        <span class="validity-indicator" id="keyAValidity"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="keyB">Clé b</label>
+                        <input type="number" id="keyB" min="0" max="25" value="8">
+                    </div>
+                </div>
+
+                <div class="text-inputs">
+                    <div class="input-group">
+                        <label for="inputText">Texte à traiter</label>
+                        <textarea id="inputText" placeholder="Entrez votre texte ici..." rows="4"></textarea>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="encryptBtn" class="btn btn-primary">Chiffrer</button>
+                    <button id="decryptBtn" class="btn btn-secondary">Déchiffrer</button>
+                    <button id="swapBtn" class="btn btn-secondary">↕ Échanger</button>
+                    <button id="clearBtn" class="btn btn-tertiary">Effacer</button>
+                    <button id="testBtn" class="btn btn-tertiary">Test BONJOUR</button>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <h3>Résultat</h3>
+                <div class="output-text" id="outputText"></div>
+                <p class="hint" id="outputHint" style="margin-top: 10px; font-size: 0.9em; color: #666; font-style: italic;"></p>
+            </div>
+
+            <div class="visualization-section">
+                <h3>Table de Correspondance</h3>
+                <div class="alphabet-mapping" id="alphabetMapping"></div>
+            </div>
+
+            <div class="analysis-section">
+                <h3>Analyse</h3>
+                <div class="analysis-content">
+                    <div class="frequency-analysis">
+                        <h4>Analyse de Fréquence</h4>
+                        <canvas id="frequencyChart" width="600" height="200"></canvas>
+                    </div>
+                    <div class="stats">
+                        <h4>Statistiques</h4>
+                        <div id="statistics"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="examples-section">
+                <h3>Exemples</h3>
+                <div class="example-buttons">
+                    <button class="example-btn" data-text="BONJOUR LE MONDE" data-a="5" data-b="8">Exemple 1</button>
+                    <button class="example-btn" data-text="CRYPTOGRAPHIE" data-a="7" data-b="3">Exemple 2</button>
+                    <button class="example-btn" data-text="MATHEMATIQUES" data-a="11" data-b="15">Exemple 3</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Simulateur de Chiffre Affine - Outil éducatif de cryptographie</p>
+        </footer>
+    </div>
+
+    <script src="Chiffrement.js"></script>
+</body>
+</html>
